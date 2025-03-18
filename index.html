@@ -27,12 +27,29 @@
       }
     });
 
-    function inviaEmail(latitudine, longitudine) {
-      // Qui dovrai aggiungere il codice per inviare l'email
-      // utilizzando un servizio di backend (ad esempio, un'API).
-      // Per semplicità, in questo esempio mostreremo solo un messaggio.
-      document.getElementById("messaggio").innerHTML = "Email inviata con latitudine: " + latitudine + ", longitudine: " + longitudine;
-    }
+function inviaEmail(latitudine, longitudine) {
+  var url = "https://script.google.com/macros/s/AKfycbwJ7snL8_6wStbnVeKgUkg8a224rc0FSOXdpJSdHZQ/exec"; // Sostituisci con l'URL dell'applicazione web
+  var data = {
+    latitudine: latitudine,
+    longitudine: longitudine,
+    timestamp: new Date().toISOString()
+  };
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.text())
+  .then(message => {
+    document.getElementById("messaggio").innerHTML = message;
+  })
+  .catch(error => {
+    document.getElementById("messaggio").innerHTML = "Errore: " + error;
+  });
+}
   </script>
 </body>
 </html>
