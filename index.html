@@ -4,11 +4,18 @@
   <title>Il mio sito web</title>
   <style>
     #inviaPosizione {
-      background-color: green;
+      background-color: red;
       color: white;
       padding: 10px 20px;
       border: none;
       cursor: pointer;
+    }
+    #debug {
+      background-color: #f0f0f0;
+      padding: 10px;
+      margin-top: 20px;
+      font-family: monospace;
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -17,6 +24,7 @@
   <img src="mathgatto.jpg" alt="Foto di mathgatto">
   <button id="inviaPosizione">Invia posizione</button>
   <p id="messaggio"></p>
+  <div id="debug"></div>
 
   <script>
     document.getElementById("inviaPosizione").addEventListener("click", function() {
@@ -44,8 +52,7 @@
         timestamp: new Date().toISOString()
       };
 
-      console.log("URL:", url); // Aggiunto log dell'URL
-      console.log("Dati inviati:", data); // Aggiunto log dei dati inviati
+      document.getElementById("debug").innerHTML = "URL: " + url + "\nDati inviati: " + JSON.stringify(data, null, 2);
 
       fetch(url, {
         method: 'POST',
@@ -55,7 +62,7 @@
         body: JSON.stringify(data)
       })
       .then(function(response) {
-        console.log("Risposta fetch:", response);
+        document.getElementById("debug").innerHTML += "\nRisposta fetch: " + JSON.stringify(response, null, 2);
         if (!response.ok) {
           return response.text().then(function(text) {
             throw new Error("Errore HTTP: " + response.status + " " + response.statusText + " - " + text);
@@ -69,6 +76,7 @@
       .catch(function(error) {
         document.getElementById("messaggio").innerHTML = "Errore: " + error.message;
         console.error("Errore fetch:", error);
+        document.getElementById("debug").innerHTML += "\nErrore fetch: " + JSON.stringify(error, null, 2);
       });
     }
   </script>
