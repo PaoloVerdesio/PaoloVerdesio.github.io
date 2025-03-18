@@ -1,10 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Il mio sito web statico</title>
+  <title>Il mio sito web</title>
 </head>
 <body>
-    <h1>QUESTO MATHGATTO</h1>
-    <img src="mathgatto.jpg" alt="Foto di Mathgatto">
+  <h1>QUESTO MATHGATTO</h1>
+  <img src="mathgatto.jpg" alt="Foto di mathgatto">
+  <button id="inviaPosizione">Invia posizione</button>
+  <p id="messaggio"></p>
+
+  <script>
+    document.getElementById("inviaPosizione").addEventListener("click", function() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var latitudine = position.coords.latitude;
+          var longitudine = position.coords.longitude;
+
+          // Qui chiameremo una funzione per inviare l'email con la posizione
+          inviaEmail(latitudine, longitudine);
+
+        }, function(error) {
+          document.getElementById("messaggio").innerHTML = "Impossibile ottenere la posizione.";
+        });
+      } else {
+        document.getElementById("messaggio").innerHTML = "Geolocalizzazione non supportata dal browser.";
+      }
+    });
+
+    function inviaEmail(latitudine, longitudine) {
+      // Qui dovrai aggiungere il codice per inviare l'email
+      // utilizzando un servizio di backend (ad esempio, un'API).
+      // Per semplicità, in questo esempio mostreremo solo un messaggio.
+      document.getElementById("messaggio").innerHTML = "Email inviata con latitudine: " + latitudine + ", longitudine: " + longitudine;
+    }
+  </script>
 </body>
 </html>
