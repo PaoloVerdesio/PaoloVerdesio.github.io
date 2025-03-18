@@ -2,6 +2,15 @@
 <html>
 <head>
   <title>Il mio sito web</title>
+  <style>
+    #inviaPosizione {
+      background-color: green;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <h1>QUESTO MATHGATTO</h1>
@@ -43,9 +52,11 @@
         body: JSON.stringify(data)
       })
       .then(function(response) {
-        console.log("Risposta fetch:", response); // Aggiunto log della risposta
+        console.log("Risposta fetch:", response);
         if (!response.ok) {
-          throw new Error("Errore HTTP: " + response.status + " " + response.statusText);
+          return response.text().then(function(text) { // Modifica qui
+            throw new Error("Errore HTTP: " + response.status + " " + response.statusText + " - " + text); // Aggiunto il testo della risposta
+          });
         }
         return response.text();
       })
