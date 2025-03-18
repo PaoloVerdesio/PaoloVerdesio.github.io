@@ -4,7 +4,7 @@
   <title>Il mio sito web</title>
   <style>
     #inviaPosizione {
-      background-color: green; /* Cambiato in verde */
+      background-color: yellow;
       color: white;
       padding: 10px 20px;
       border: none;
@@ -17,6 +17,10 @@
       font-family: monospace;
       white-space: pre-wrap;
     }
+    #risposta {
+      margin-top: 20px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -25,6 +29,7 @@
   <button id="inviaPosizione">Invia posizione</button>
   <p id="messaggio"></p>
   <div id="debug"></div>
+  <div id="risposta"></div>
 
   <script>
     document.getElementById("inviaPosizione").addEventListener("click", function() {
@@ -62,16 +67,16 @@
         body: JSON.stringify(data)
       })
       .then(function(response) {
-        document.getElementById("debug").innerHTML += "\nRisposta fetch: " + JSON.stringify(response, null, 2); // Formattazione migliorata
+        document.getElementById("debug").innerHTML += "\nRisposta fetch: " + JSON.stringify(response, null, 2);
         if (!response.ok) {
           return response.text().then(function(text) {
             throw new Error("Errore HTTP: " + response.status + " " + response.statusText + " - " + text);
           });
         }
-        return response.text();
+        return response.json(); // Modifica qui
       })
-      .then(function(message) {
-        document.getElementById("messaggio").innerHTML = message;
+      .then(function(responseData) { // Modifica qui
+        document.getElementById("risposta").innerHTML = "Risposta: " + JSON.stringify(responseData, null, 2); // Visualizza la risposta
       })
       .catch(function(error) {
         document.getElementById("messaggio").innerHTML = "Errore: " + error.message;
@@ -79,7 +84,7 @@
         if (error instanceof Error) {
           document.getElementById("debug").innerHTML += "\nErrore fetch: " + JSON.stringify(error, null, 2);
         } else {
-          document.getElementById("debug").innerHTML += "\nErrore fetch: " + JSON.stringify(error); // Visualizza l'intero oggetto
+          document.getElementById("debug").innerHTML += "\nErrore fetch: " + JSON.stringify(error);
         }
       });
     }
