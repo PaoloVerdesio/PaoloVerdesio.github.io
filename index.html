@@ -20,6 +20,7 @@
 
         }, function(error) {
           document.getElementById("messaggio").innerHTML = "Impossibile ottenere la posizione: " + error.message;
+          console.error("Errore geolocalizzazione:", error);
         });
       } else {
         document.getElementById("messaggio").innerHTML = "Geolocalizzazione non supportata dal browser.";
@@ -42,8 +43,9 @@
         body: JSON.stringify(data)
       })
       .then(function(response) {
+        console.log("Risposta fetch:", response); // Aggiunto log della risposta
         if (!response.ok) {
-          throw new Error("Errore HTTP: " + response.status);
+          throw new Error("Errore HTTP: " + response.status + " " + response.statusText);
         }
         return response.text();
       })
@@ -52,7 +54,7 @@
       })
       .catch(function(error) {
         document.getElementById("messaggio").innerHTML = "Errore: " + error.message;
-        console.error("Errore fetch:", error); // Aggiunto console.error per debug
+        console.error("Errore fetch:", error);
       });
     }
   </script>
