@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Il mio sito web</title>
+  <title>Invia posizione a Google Sheets (Debug)</title>
   <style>
     #inviaPosizione {
-      background-color: yellow;
+      background-color: green;
       color: white;
       padding: 10px 20px;
       border: none;
@@ -21,42 +21,58 @@
       margin-top: 20px;
       font-weight: bold;
     }
+    #log {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 <body>
-  <h1>QUESTO MATHGATTO</h1>
-  <img src="mathgatto.jpg" alt="Foto di mathgatto">
+  <h1>Invia la tua posizione (Debug)</h1>
   <button id="inviaPosizione">Invia posizione</button>
   <p id="messaggio"></p>
   <div id="debug"></div>
   <div id="risposta"></div>
+  <div id="log"></div>
 
   <script>
+    function log(message) {
+      document.getElementById("log").innerHTML += message + "\n";
+    }
+
     document.getElementById("inviaPosizione").addEventListener("click", function() {
+      log("Cliccato il pulsante 'Invia posizione'.");
       if (navigator.geolocation) {
+        log("Geolocalizzazione supportata.");
         navigator.geolocation.getCurrentPosition(function(position) {
+          log("Posizione ottenuta.");
           var latitudine = position.coords.latitude;
           var longitudine = position.coords.longitude;
-
+          log("Latitudine: " + latitudine + ", Longitudine: " + longitudine);
           inviaEmail(latitudine, longitudine);
-
         }, function(error) {
+          log("Errore geolocalizzazione: " + error.message);
           document.getElementById("messaggio").innerHTML = "Impossibile ottenere la posizione: " + error.message;
           console.error("Errore geolocalizzazione:", error);
         });
       } else {
+        log("Geolocalizzazione non supportata dal browser.");
         document.getElementById("messaggio").innerHTML = "Geolocalizzazione non supportata dal browser.";
       }
     });
 
     function inviaEmail(latitudine, longitudine) {
-      var url = "https://script.google.com/macros/s/AKfycbwOm7iYha50cqU0pEw6MeabMYpNKmex7lImjEzMkmDn4tAeOmoBNJUkxkYmDgViRqje/exec";
+      var url = "INSERISCI_QUI_IL_TUO_URL_GOOGLE_APPS_SCRIPT"; // Sostituisci con il tuo URL
+      log("URL Google Apps Script: " + url);
       var data = {
         latitudine: latitudine,
         longitudine: longitudine,
         timestamp: new Date().toISOString()
       };
-
+      log("Dati inviati: " + JSON.stringify(data, null, 2));
       document.getElementById("debug").innerHTML = "URL: " + url + "\nDati inviati: " + JSON.stringify(data, null, 2);
 
       fetch(url, {
@@ -67,23 +83,28 @@
         body: JSON.stringify(data)
       })
       .then(function(response) {
+        log("Risposta fetch ricevuta: " + JSON.stringify(response, null, 2));
         document.getElementById("debug").innerHTML += "\nRisposta fetch: " + JSON.stringify(response, null, 2);
         if (!response.ok) {
           return response.text().then(function(text) {
             throw new Error("Errore HTTP: " + response.status + " " + response.statusText + " - " + text);
           });
         }
-        return response.json(); // Modifica qui
+        return response.json();
       })
-      .then(function(responseData) { // Modifica qui
-        document.getElementById("risposta").innerHTML = "Risposta: " + JSON.stringify(responseData, null, 2); // Visualizza la risposta
+      .then(function(responseData) {
+        log("Risposta JSON ricevuta: " + JSON.stringify(responseData, null, 2));
+        document.getElementById("risposta").innerHTML = "Risposta: " + JSON.stringify(responseData, null, 2);
       })
       .catch(function(error) {
+        log("Errore fetch: " + error.message);
         document.getElementById("messaggio").innerHTML = "Errore: " + error.message;
         console.error("Errore fetch:", error);
         if (error instanceof Error) {
+          log("Errore dettagliato: " + JSON.stringify(error, null, 2));
           document.getElementById("debug").innerHTML += "\nErrore fetch: " + JSON.stringify(error, null, 2);
         } else {
+          log("Errore non dettagliato: " + JSON.stringify(error));
           document.getElementById("debug").innerHTML += "\nErrore fetch: " + JSON.stringify(error);
         }
       });
