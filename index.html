@@ -16,7 +16,6 @@
           var latitudine = position.coords.latitude;
           var longitudine = position.coords.longitude;
 
-          // Qui chiameremo una funzione per inviare l'email con la posizione
           inviaEmail(latitudine, longitudine);
 
         }, function(error) {
@@ -27,29 +26,29 @@
       }
     });
 
-function inviaEmail(latitudine, longitudine) {
-  var url = "https://script.google.com/macros/s/AKfycbwJ7snL8_6wStbnVeKgUkg8a224rc0FSOXdpJSdHZQ/exec"; // Sostituisci con l'URL dell'applicazione web
-  var data = {
-    latitudine: latitudine,
-    longitudine: longitudine,
-    timestamp: new Date().toISOString()
-  };
+    function inviaEmail(latitudine, longitudine) {
+      var url = "https://script.google.com/macros/s/AKfycbxTQhnrfwT74usWUW-UPXQGzDhyaPP6yAPXwjiBSDZl5Fms_sbb-q4pnJI5EAEF08bU/exec";
+      var data = {
+        latitudine: latitudine,
+        longitudine: longitudine,
+        timestamp: new Date().toISOString()
+      };
 
-  fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  .then(response => response.text())
-  .then(message => {
-    document.getElementById("messaggio").innerHTML = message;
-  })
-  .catch(error => {
-    document.getElementById("messaggio").innerHTML = "Errore: " + error;
-  });
-}
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.text())
+      .then(message => {
+        document.getElementById("messaggio").innerHTML = message;
+      })
+      .catch(error => {
+        document.getElementById("messaggio").innerHTML = "Errore: " + error;
+      });
+    }
   </script>
 </body>
 </html>
