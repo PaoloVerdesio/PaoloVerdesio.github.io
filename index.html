@@ -4,7 +4,7 @@
   <title>Il mio sito web</title>
   <style>
     #inviaPosizione {
-      background-color: red;
+      background-color: green;
       color: white;
       padding: 10px 20px;
       border: none;
@@ -44,6 +44,9 @@
         timestamp: new Date().toISOString()
       };
 
+      console.log("URL:", url); // Aggiunto log dell'URL
+      console.log("Dati inviati:", data); // Aggiunto log dei dati inviati
+
       fetch(url, {
         method: 'POST',
         headers: {
@@ -66,8 +69,6 @@
       .catch(function(error) {
         document.getElementById("messaggio").innerHTML = "Errore: " + error.message;
         console.error("Errore fetch:", error);
-        console.log("URL:", url); // Aggiunto log dell'URL
-        console.log("Dati inviati:", data); // Aggiunto log dei dati inviati
       });
     }
   </script>
