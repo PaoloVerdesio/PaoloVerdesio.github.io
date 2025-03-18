@@ -19,7 +19,7 @@
           inviaEmail(latitudine, longitudine);
 
         }, function(error) {
-          document.getElementById("messaggio").innerHTML = "Impossibile ottenere la posizione.";
+          document.getElementById("messaggio").innerHTML = "Impossibile ottenere la posizione: " + error.message;
         });
       } else {
         document.getElementById("messaggio").innerHTML = "Geolocalizzazione non supportata dal browser.";
@@ -41,12 +41,18 @@
         },
         body: JSON.stringify(data)
       })
-      .then(response => response.text())
-      .then(message => {
+      .then(function(response) {
+        if (!response.ok) {
+          throw new Error("Errore HTTP: " + response.status);
+        }
+        return response.text();
+      })
+      .then(function(message) {
         document.getElementById("messaggio").innerHTML = message;
       })
-      .catch(error => {
-        document.getElementById("messaggio").innerHTML = "Errore: " + error;
+      .catch(function(error) {
+        document.getElementById("messaggio").innerHTML = "Errore: " + error.message;
+        console.error("Errore fetch:", error); // Aggiunto console.error per debug
       });
     }
   </script>
